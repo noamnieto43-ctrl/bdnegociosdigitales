@@ -293,7 +293,7 @@ delete from products
 where supplier_id = 1;
 
 
-_-- chancas el 2 , y rama se queda igual 
+-- chancas el 2 , y rama se queda igual 
 
 
 

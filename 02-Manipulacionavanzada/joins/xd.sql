@@ -97,7 +97,7 @@ FROM orders
 SELECT MAX(DATEPART(YEAR,OrderDate))
 FROM Orders
 
-SELECT DATEPART(YEAR, MAX(OrderDate)) AS [AÑO]
+SELECT DATEPART(YEAR, MAX(OrderDate)) AS [Aï¿½O]
 FROM Orders
 
 
@@ -211,9 +211,9 @@ FROM Products
 GROUP BY CategoryID
 ORDER BY [Total de productos] DESC;
 
-seleccionar el precio promedio por probedor de los productos 
-redondear a dos decimales el resultado
-ordenar de forma decendente por el precio promedio 
+--seleccionar el precio promedio por probedor de los productos 
+--redondear a dos decimales el resultado
+--ordenar de forma decendente por el precio promedio 
 
 
 

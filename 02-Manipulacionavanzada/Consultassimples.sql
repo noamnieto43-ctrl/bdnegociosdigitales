@@ -17,7 +17,7 @@ FROM [Order Details]
 SELECT 
 ProductID,
 ProductName,
-UnitPrice,
+UnitPrice,   
 UnitsInStock
 FROM Products;
 
@@ -129,10 +129,10 @@ where OrderDate > '1997-12-31';
 
 SET LANGUAGE SPANISH
 SELECT OrderID, OrderDate, CustomerID, ShipCountry,
-YEAR(OrderDate) AS Año,
+YEAR(OrderDate) AS Aï¿½o,
 MONTH(OrderDate) AS Mes,
-DAY(orderdate) AS Día,
-DATEPART (YEAR, OrderDate) AS AÑO2,
+DAY(orderdate) AS Dï¿½a,
+DATEPART (YEAR, OrderDate) AS Aï¿½O2,
 DATEPART (QUARTER, OrderDate) AS Trimestre,
 DATEPART (WEEKDAY, OrderDate) as [Dia semana],
 DATEPART (WEEKDAY, OrderDate) AS [Dia semana nombre]
@@ -158,9 +158,6 @@ SELECT *
 FROM Orders
 Where ShipRegion = 
 
-SELECT OrderID, ShipRegion
-FROM Orders
-WHERE ShipRegion IS NULL;
 
 
 SELECT OrderID, ShipRegion

@@ -147,3 +147,5 @@ Las bases de datos NoSQL (Not Only SQL) surgieron para abordar las limitaciones 
 ## 6. Conclusión
 
 Las bases de datos son el cimiento sobre el que se construyen los negocios digitales. Comprender la gestión de servidores, las técnicas avanzadas de manipulación, la importancia de las transacciones y las ventajas de las bases de datos NoSQL permite a las empresas construir sistemas robustos, escalables y eficientes, capaces de adaptarse a las demandas cambiantes del mercado digital. La elección de la base de datos correcta y una gestión adecuada son determinantes para el éxito a largo plazo.
+
+![base de datos](/img/xd.jpeg)
