@@ -464,3 +464,104 @@ begin
    select * from clientes
    commit;
    rollback;
+
+
+
+  -- ejemplo de uso de transacciones junto con el try catch
+
+  begin try
+  begin transaction
+  insert into clientes values (3, 'VALDERRABANO');
+  insert into clientes
+  values (4, 'ROLES ANITA')
+  COMMIT;
+  end try
+  begin catch
+  if @@TRANCOUNT > 1 
+  begin
+  ROLLBACK;
+  end
+  PRINT 'Se hizo rolback por error';
+  Print 'ERROR:' + ERROR_MESSAGE();
+  end catch
+
+  go
+  ------ crear un store procedure que inserte un cliente, con las validaciones nesesarias
+
+  CREATE OR ALTER PROC usp_insertar_cliente
+  @id int,
+  @nombre varchar(35)
+  as 
+  begin 
+   begin try 
+   begin transaction
+  insert into clientes
+  values (@id, @nombre);
+  commit;
+  print 'cliente insertado'
+  end try
+   
+    begin catch
+   if @@TRANCOUNT > 1
+   begin
+   rollback;
+   end
+   print 'error:' + ERROR_MeSSAGE();
+   end catch
+  end;
+
+
+
+
+
+
+
+
+
+
+
+
+
+  select * from clientes;
+
+  UPDATE clientes 
+  SET nombre = 'AMERICO AZULL' WHERE ID = 1;
+  IF @@ROWCOUNT < 1
+  BEGIN 
+  PRINT @@ROWCOUNT;
+  PRINT 'NO EXIXTE EL CLIENTE'
+  END
+  ELSE
+  PRINT 'CLIENTE ACTUALIZADO'
+
+  create table teams 
+  (
+  id int not null identity primary key,
+  nombre nvarchar(15)
+  
+
+  
+  );
+  --FORMA DE OBTENER UN IDENTITY INSERTADO FORMA 1
+
+  insert into teams (nombre)
+  values ('Cruz Azul')
+  DECLARE @id_insertado int
+  set @id_insertado = @@identity
+  print 'ID INSERTADO:' + cast(@id_insertado as varchar);
+  select @id_insertado = @@IDENTITY
+  print 'ID INSERTADO FORMA 2' + cast(@id_insertado as varchar)
+
+  select * from teams
+     insert into teams (nombre)
+  values ('Agilas')
+    --FORMA DE OBTENER UN IDENTITY INSERTADO FORMA 2
+
+  insert into teams (nombre)
+  values ('Cruz Azul')
+  DECLARE @id_insertado2 int
+  set @id_insertado2 = SCOPE_IDENTITY();
+  print 'ID INSERTADO:' + cast(@id_insertado2 as varchar);
+  select @id_insertado2 = SCOPE_IDENTITY();
+  print 'ID INSERTADO FORMA 2' + cast(@id_insertado2 as varchar)
+
