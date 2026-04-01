@@ -142,3 +142,72 @@ BEGIN
 END;
 GO
 
+
+---------------------
+
+
+/* ESTRUCTURA PARA EXAMEN DE BASE DE DATOS
+   Proyecto: Gestión de Transacciones (Northwind / BDPracticas)
+*/
+
+CREATE OR ALTER PROC USP_NombreDelProceso
+    -- 1. DECLARAR PARÁMETROS (Entradas del usuario)
+    @parametroID INT,
+    @cantidad INT,
+    @clienteID NVARCHAR(5) -- Ejemplo para Northwind
+AS
+BEGIN
+    BEGIN TRY
+        BEGIN TRANSACTION
+            
+            -- 2. VALIDACIÓN DE EXISTENCIA (¿Existe el registro?)
+            IF NOT EXISTS (SELECT 1 FROM TablaMaestra WHERE ID = @parametroID)
+            BEGIN
+                ;THROW 50001, 'Error: El ID proporcionado no existe.', 1;
+            END
+
+            -- 3. VALIDACIÓN DE LÓGICA (¿Hay stock o saldo?)
+            -- Ejemplo: IF @cantidad > (Subconsulta de stock)
+            IF @cantidad > (SELECT Existencia FROM Productos WHERE ID = @parametroID)
+            BEGIN
+                ;THROW 50002, 'Error: No hay existencias suficientes.', 1;
+            END
+
+            -- 4. OPERACIÓN MAESTRA (Insertar en tabla principal)
+            INSERT INTO TablaVentas (ClienteID, Fecha) 
+            VALUES (@clienteID, GETDATE());
+            
+            -- 5. CAPTURAR EL ID GENERADO (Solo si la tabla es IDENTITY)
+            DECLARE @NuevoID INT = SCOPE_IDENTITY();
+
+            -- 6. OPERACIÓN DETALLE (Insertar con subconsulta de precio)
+            INSERT INTO TablaDetalle (VentaID, ProductoID, Precio, Cantidad)
+            VALUES (
+                @NuevoID, 
+                @parametroID, 
+                (SELECT Precio FROM Productos WHERE ID = @parametroID), 
+                @cantidad
+            );
+
+            -- 7. ACTUALIZACIÓN DE ESTADO (Resta de Stock)
+            UPDATE Productos 
+            SET Existencia = Existencia - @cantidad 
+            WHERE ID = @parametroID;
+
+        COMMIT TRANSACTION
+        PRINT 'Operación realizada con éxito.';
+
+    END TRY
+    BEGIN CATCH
+        -- 8. MANEJO DE SEGURIDAD (Deshacer cambios si algo falla)
+        IF @@TRANCOUNT > 0 
+        BEGIN
+            ROLLBACK TRANSACTION;
+        END
+        
+        -- Mostrar el mensaje de error al usuario
+        PRINT 'ERROR: ' + ERROR_MESSAGE();
+    END CATCH
+END
+GO
+

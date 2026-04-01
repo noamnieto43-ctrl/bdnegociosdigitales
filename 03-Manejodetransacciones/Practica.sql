@@ -158,3 +158,32 @@ EXEC USP_AGREGAR_VENTA
     @id_Producto = 1, 
     @cantidad_vendida = 1000;
 
+
+
+   -- tabla type 
+    --como se consulta 
+    -- y como se inserta en ella 
+
+     -- stor que resiva como parametro la tabla type  que permitan agregar n productos 
+
+    -- Como se crea
+
+    CREATE TYPE MiTablaTipo AS TABLE (
+    ID INT PRIMARY KEY,
+    Nombre VARCHAR(50),
+    FechaRegistro DATETIME
+);
+
+
+-- 1. Declarar la variable del tipo creado
+DECLARE @MiVariableTabla AS MiTablaTipo;
+
+-- 2. Insertar datos en la variable
+INSERT INTO @MiVariableTabla (ID, Nombre, FechaRegistro)
+VALUES 
+(1, 'Ana García', GETDATE()),
+(2, 'Luis Pérez', GETDATE()),
+(3, 'María López', GETDATE());
+
+
+SELECT * FROM @MiVariableTabla
